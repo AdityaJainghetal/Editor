@@ -7,6 +7,7 @@ function App() {
         Full Featured Aditya jain Editor
       </h1>
       <RichTextEditor />
+      
     </div>
   );
 }
