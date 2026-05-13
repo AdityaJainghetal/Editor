@@ -1,297 +1,237 @@
-// import { useState, useRef, useEffect } from 'react';
-// import { Bold, Italic, Underline, Strikethrough, List, ListOrdered, AlignLeft, AlignCenter, AlignRight, AlignJustify, Link, Image, Undo, Redo, Maximize, Minimize, Code } from 'lucide-react';
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { TextStyle } from "@tiptap/extension-text-style";
+import Color from "@tiptap/extension-color";
+import Highlight from "@tiptap/extension-highlight";
+import TextAlign from "@tiptap/extension-text-align";
+import Link from "@tiptap/extension-link";
+import Image from "@tiptap/extension-image";
 
-// export default function RichTextEditor() {
-//   const editorRef = useRef(null);
-//   const [isFullscreen, setIsFullscreen] = useState(false);
+import {
+  Bold,
+  Italic,
+  Underline,
+  Strikethrough,
+  List,
+  ListOrdered,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  AlignJustify,
+  Link as LinkIcon,
+  Image as ImageIcon,
+  Undo,
+  Redo,
+  Maximize,
+  Minimize,
+  Code,
+} from "lucide-react";
+import { useState } from "react";
 
-//   const execCommand = (command, value = null) => {
-//     document.execCommand(command, false, value);
-//     editorRef.current?.focus();
-//   };
-
-//   const insertLink = () => {
-//     const url = prompt('Enter URL:');
-//     if (url) execCommand('createLink', url);
-//   };
-
-//   const insertImage = () => {
-//     const input = document.createElement('input');
-//     input.type = 'file';
-//     input.accept = 'image/*';
-//     input.onchange = (e) => {
-//       const file = e.target.files[0];
-//       if (file) {
-//         const reader = new FileReader();
-//         reader.onload = (event) => {
-//           execCommand('insertImage', event.target.result);
-//         };
-//         reader.readAsDataURL(file);
-//       }
-//     };
-//     input.click();
-//   };
-
-//   const toggleFullscreen = () => {
-//     setIsFullscreen(!isFullscreen);
-//   };
-
-//   return (
-//     <div className={`max-w-4xl mx-auto p-4 ${isFullscreen ? 'fixed inset-0 bg-zinc-950 z-50' : ''}`}>
-//       <div className="bg-zinc-900 rounded-2xl shadow-2xl overflow-hidden border border-zinc-800">
-//         {/* Toolbar */}
-//         <div className="bg-zinc-950 p-3 flex flex-wrap gap-2 border-b border-zinc-800">
-//           {/* Text Formatting */}
-//           <div className="flex gap-1">
-//             <ToolbarButton icon={<Bold size={18} />} onClick={() => execCommand('bold')} title="Bold" />
-//             <ToolbarButton icon={<Italic size={18} />} onClick={() => execCommand('italic')} title="Italic" />
-//             <ToolbarButton icon={<Underline size={18} />} onClick={() => execCommand('underline')} title="Underline" />
-//             <ToolbarButton icon={<Strikethrough size={18} />} onClick={() => execCommand('strikeThrough')} title="Strikethrough" />
-//           </div>
-
-//           {/* Headings */}
-//           <select 
-//             onChange={(e) => execCommand('formatBlock', e.target.value)}
-//             className="bg-zinc-800 text-white px-3 py-1 rounded-lg border border-zinc-700 focus:outline-none"
-//           >
-//             <option value="p">Paragraph</option>
-//             <option value="h1">Heading 1</option>
-//             <option value="h2">Heading 2</option>
-//             <option value="h3">Heading 3</option>
-//           </select>
-
-//           {/* Lists */}
-//           <ToolbarButton icon={<List size={18} />} onClick={() => execCommand('insertUnorderedList')} title="Bullet List" />
-//           <ToolbarButton icon={<ListOrdered size={18} />} onClick={() => execCommand('insertOrderedList')} title="Numbered List" />
-
-//           {/* Alignment */}
-//           <ToolbarButton icon={<AlignLeft size={18} />} onClick={() => execCommand('justifyLeft')} />
-//           <ToolbarButton icon={<AlignCenter size={18} />} onClick={() => execCommand('justifyCenter')} />
-//           <ToolbarButton icon={<AlignRight size={18} />} onClick={() => execCommand('justifyRight')} />
-//           <ToolbarButton icon={<AlignJustify size={18} />} onClick={() => execCommand('justifyFull')} />
-
-//           {/* Extras */}
-//           <ToolbarButton icon={<Link size={18} />} onClick={insertLink} title="Insert Link" />
-//           <ToolbarButton icon={<Image size={18} />} onClick={insertImage} title="Insert Image" />
-//           <ToolbarButton icon={<Code size={18} />} onClick={() => execCommand('formatBlock', 'pre')} title="Code Block" />
-
-//           <div className="flex-1" />
-
-//           {/* Undo/Redo & Fullscreen */}
-//           <ToolbarButton icon={<Undo size={18} />} onClick={() => execCommand('undo')} />
-//           <ToolbarButton icon={<Redo size={18} />} onClick={() => execCommand('redo')} />
-//           <ToolbarButton 
-//             icon={isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />} 
-//             onClick={toggleFullscreen} 
-//           />
-//         </div>
-
-//         {/* Editor Area */}
-//         <div 
-//           ref={editorRef}
-//           contentEditable
-//           className="min-h-[500px] p-6 bg-zinc-900 text-white focus:outline-none prose prose-invert max-w-none"
-//           style={{ 
-//             fontSize: '16px',
-//             lineHeight: '1.7'
-//           }}
-//           onInput={() => {}}
-//         />
-//       </div>
-
-//       <p className="text-center text-zinc-500 text-sm mt-3">
-//         Content is saved automatically in real-time (you can add localStorage if needed)
-//       </p>
-//     </div>
-//   );
-// }
-
-// function ToolbarButton({ icon, onClick, title = "" }) {
-//   return (
-//     <button
-//       onClick={onClick}
-//       className="p-2 hover:bg-zinc-800 rounded-lg text-zinc-300 hover:text-white transition-all active:scale-95"
-//       title={title}
-//     >
-//       {icon}
-//     </button>
-//   );
-// }
-
-import { useState, useRef } from 'react';
-import { 
-  Bold, Italic, Underline, Strikethrough, List, ListOrdered, 
-  AlignLeft, AlignCenter, AlignRight, AlignJustify, Link, Image, 
-  Undo, Redo, Maximize, Minimize, Code 
-} from 'lucide-react';
-
-export default function RichTextEditor() {
-  const editorRef = useRef(null);
+export default function TiptapEditor({ initialContent = "", onContentChange }) {
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [fontSize, setFontSize] = useState(16);
 
-  const execCommand = (command, value = null) => {
-    document.execCommand(command, false, value);
-    editorRef.current?.focus();
-  };
+  const editor = useEditor({
+    extensions: [
+      StarterKit.configure({
+        heading: { levels: [1, 2, 3] },
+      }),
+      TextStyle,
+      Color,
+      Highlight.configure({ multicolor: true }),
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: { target: "_blank" },
+      }),
+      Image.configure({ inline: true, allowBase64: true }),
+    ],
+    content: initialContent,
+    onUpdate: ({ editor }) => {
+      onContentChange?.(editor.getHTML());
+    },
+  });
 
-  const changeFontSize = (size) => {
-    setFontSize(size);
-    document.execCommand('fontSize', false, 3); // fallback
-    // Better modern approach
-    const selection = window.getSelection();
-    if (selection.rangeCount) {
-      const range = selection.getRangeAt(0);
-      const span = document.createElement('span');
-      span.style.fontSize = `${size}px`;
-      range.surroundContents(span);
+  if (!editor) {
+    return <div className="p-8 text-zinc-400">Loading Editor...</div>;
+  }
+
+  const addImage = () => {
+    const url = prompt("Enter Image URL:");
+    if (url) {
+      editor.chain().focus().setImage({ src: url }).run();
     }
   };
 
-  const changeTextColor = (color) => {
-    execCommand('foreColor', color);
+  const setLink = () => {
+    const url = prompt("Enter URL:");
+    if (url) {
+      editor.chain().focus().setLink({ href: url }).run();
+    }
   };
-
-  const changeBgColor = (color) => {
-    execCommand('hiliteColor', color);
-  };
-
-  const insertLink = () => {
-    const url = prompt('Enter URL:');
-    if (url) execCommand('createLink', url);
-  };
-
-  const insertImage = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => execCommand('insertImage', event.target.result);
-        reader.readAsDataURL(file);
-      }
-    };
-    input.click();
-  };
-
-  const toggleFullscreen = () => setIsFullscreen(!isFullscreen);
 
   return (
-    <div className={`max-w-5xl mx-auto p-4 ${isFullscreen ? 'fixed inset-0 bg-zinc-950 z-50' : ''}`}>
-      <div className="bg-zinc-900 rounded-2xl shadow-2xl overflow-hidden border border-zinc-800">
-        
+    <div
+      className={`max-w-5xl mx-auto p-4 ${isFullscreen ? "fixed inset-0 bg-zinc-950 z-50 p-6" : ""}`}
+    >
+      <div className="bg-zinc-900 rounded-2xl shadow-2xl overflow-hidden border border-zinc-800 flex flex-col h-full">
         {/* Toolbar */}
-        <div className="bg-zinc-950 p-3 flex flex-wrap gap-2 border-b border-zinc-800 items-center">
-          
+        <div className="bg-zinc-950 p-3 flex flex-wrap gap-2 border-b border-zinc-800 items-center sticky top-0 z-10">
           {/* Font Size */}
-          <div className="flex items-center gap-1">
-            <span className="text-xs text-zinc-400 px-2">Size:</span>
-            <select
-              value={fontSize}
-              onChange={(e) => changeFontSize(Number(e.target.value))}
-              className="bg-zinc-800 text-white px-3 py-1 rounded-lg border border-zinc-700 focus:outline-none w-20"
-            >
-              {[12, 14, 16, 18, 20, 24, 28, 32, 36, 48].map(size => (
-                <option key={size} value={size}>{size}px</option>
-              ))}
-            </select>
-            <input
-              type="number"
-              value={fontSize}
-              onChange={(e) => changeFontSize(Number(e.target.value))}
-              className="bg-zinc-800 text-white w-16 px-2 py-1 rounded-lg border border-zinc-700 text-center"
-              min="8"
-              max="72"
-            />
-          </div>
+          <select
+            onChange={(e) =>
+              editor.chain().focus().setFontSize?.(e.target.value).run()
+            }
+            className="bg-zinc-800 text-white px-3 py-1.5 rounded-lg border border-zinc-700"
+          >
+            <option value="12px">12px</option>
+            <option value="14px">14px</option>
+            <option value="16px">16px</option>
+            <option value="18px">18px</option>
+            <option value="20px">20px</option>
+            <option value="24px">24px</option>
+            <option value="28px">28px</option>
+            <option value="32px">32px</option>
+          </select>
 
           {/* Text Color */}
-          <div className="flex items-center gap-1">
-            <span className="text-xs text-zinc-400 px-1">Color:</span>
-            <input
-              type="color"
-              onChange={(e) => changeTextColor(e.target.value)}
-              className="w-9 h-8 bg-transparent border border-zinc-700 rounded cursor-pointer"
-              title="Text Color"
-            />
-          </div>
+          <input
+            type="color"
+            onChange={(e) =>
+              editor.chain().focus().setColor(e.target.value).run()
+            }
+            className="w-9 h-8 bg-transparent border border-zinc-700 rounded cursor-pointer"
+          />
 
-          {/* Background Color */}
-          <div className="flex items-center gap-1">
-            <span className="text-xs text-zinc-400 px-1">Highlight:</span>
-            <input
-              type="color"
-              onChange={(e) => changeBgColor(e.target.value)}
-              className="w-9 h-8 bg-transparent border border-zinc-700 rounded cursor-pointer"
-              title="Highlight Color"
-            />
-          </div>
+          {/* Highlight Color */}
+          <input
+            type="color"
+            onChange={(e) =>
+              editor
+                .chain()
+                .focus()
+                .setHighlight({ color: e.target.value })
+                .run()
+            }
+            className="w-9 h-8 bg-transparent border border-zinc-700 rounded cursor-pointer"
+          />
 
           {/* Formatting */}
           <div className="flex gap-1">
-            <ToolbarButton icon={<Bold size={18} />} onClick={() => execCommand('bold')} title="Bold" />
-            <ToolbarButton icon={<Italic size={18} />} onClick={() => execCommand('italic')} title="Italic" />
-            <ToolbarButton icon={<Underline size={18} />} onClick={() => execCommand('underline')} title="Underline" />
-            <ToolbarButton icon={<Strikethrough size={18} />} onClick={() => execCommand('strikeThrough')} title="Strikethrough" />
+            <ToolbarButton
+              icon={<Bold size={18} />}
+              onClick={() => editor.chain().focus().toggleBold().run()}
+              active={editor.isActive("bold")}
+            />
+            <ToolbarButton
+              icon={<Italic size={18} />}
+              onClick={() => editor.chain().focus().toggleItalic().run()}
+              active={editor.isActive("italic")}
+            />
+            <ToolbarButton
+              icon={<Underline size={18} />}
+              onClick={() => editor.chain().focus().toggleUnderline().run()}
+              active={editor.isActive("underline")}
+            />
+            <ToolbarButton
+              icon={<Strikethrough size={18} />}
+              onClick={() => editor.chain().focus().toggleStrike().run()}
+              active={editor.isActive("strike")}
+            />
           </div>
 
           {/* Headings */}
-          <select 
-            onChange={(e) => execCommand('formatBlock', e.target.value)}
-            className="bg-zinc-800 text-white px-3 py-1 rounded-lg border border-zinc-700"
+          <select
+            onChange={(e) => {
+              const level = parseInt(e.target.value);
+              if (level === 0) editor.chain().focus().setParagraph().run();
+              else editor.chain().focus().toggleHeading({ level }).run();
+            }}
+            className="bg-zinc-800 text-white px-3 py-1.5 rounded-lg border border-zinc-700"
           >
-            <option value="p">Paragraph</option>
-            <option value="h1">H1</option>
-            <option value="h2">H2</option>
-            <option value="h3">H3</option>
+            <option value="0">Paragraph</option>
+            <option value="1">H1</option>
+            <option value="2">H2</option>
+            <option value="3">H3</option>
           </select>
 
-          {/* Lists & Alignment */}
-          <ToolbarButton icon={<List size={18} />} onClick={() => execCommand('insertUnorderedList')} title="Bullet List" />
-          <ToolbarButton icon={<ListOrdered size={18} />} onClick={() => execCommand('insertOrderedList')} title="Numbered List" />
+          {/* Lists */}
+          <ToolbarButton
+            icon={<List size={18} />}
+            onClick={() => editor.chain().focus().toggleBulletList().run()}
+            active={editor.isActive("bulletList")}
+          />
+          <ToolbarButton
+            icon={<ListOrdered size={18} />}
+            onClick={() => editor.chain().focus().toggleOrderedList().run()}
+            active={editor.isActive("orderedList")}
+          />
 
-          <ToolbarButton icon={<AlignLeft size={18} />} onClick={() => execCommand('justifyLeft')} />
-          <ToolbarButton icon={<AlignCenter size={18} />} onClick={() => execCommand('justifyCenter')} />
-          <ToolbarButton icon={<AlignRight size={18} />} onClick={() => execCommand('justifyRight')} />
-          <ToolbarButton icon={<AlignJustify size={18} />} onClick={() => execCommand('justifyFull')} />
+          {/* Alignment */}
+          <ToolbarButton
+            icon={<AlignLeft size={18} />}
+            onClick={() => editor.chain().focus().setTextAlign("left").run()}
+          />
+          <ToolbarButton
+            icon={<AlignCenter size={18} />}
+            onClick={() => editor.chain().focus().setTextAlign("center").run()}
+          />
+          <ToolbarButton
+            icon={<AlignRight size={18} />}
+            onClick={() => editor.chain().focus().setTextAlign("right").run()}
+          />
+          <ToolbarButton
+            icon={<AlignJustify size={18} />}
+            onClick={() => editor.chain().focus().setTextAlign("justify").run()}
+          />
 
           {/* Extras */}
-          <ToolbarButton icon={<Link size={18} />} onClick={insertLink} title="Insert Link" />
-          <ToolbarButton icon={<Image size={18} />} onClick={insertImage} title="Insert Image" />
-          <ToolbarButton icon={<Code size={18} />} onClick={() => execCommand('formatBlock', 'pre')} title="Code Block" />
+          <ToolbarButton icon={<LinkIcon size={18} />} onClick={setLink} />
+          <ToolbarButton icon={<ImageIcon size={18} />} onClick={addImage} />
+          <ToolbarButton
+            icon={<Code size={18} />}
+            onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+          />
 
           <div className="flex-1" />
 
-          {/* Undo, Redo, Fullscreen */}
-          <ToolbarButton icon={<Undo size={18} />} onClick={() => execCommand('undo')} />
-          <ToolbarButton icon={<Redo size={18} />} onClick={() => execCommand('redo')} />
-          <ToolbarButton 
-            icon={isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />} 
-            onClick={toggleFullscreen} 
+          <ToolbarButton
+            icon={<Undo size={18} />}
+            onClick={() => editor.chain().focus().undo().run()}
+          />
+          <ToolbarButton
+            icon={<Redo size={18} />}
+            onClick={() => editor.chain().focus().redo().run()}
+          />
+          <ToolbarButton
+            icon={
+              isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />
+            }
+            onClick={() => setIsFullscreen(!isFullscreen)}
           />
         </div>
 
-        {/* Editor Area */}
-        <div 
-          ref={editorRef}
-          contentEditable
-          className="min-h-[520px] p-8 bg-zinc-900 text-white focus:outline-none prose prose-invert max-w-none"
-          style={{ fontSize: '16px', lineHeight: '1.8' }}
-        />
+        {/* Editor Content */}
+        <div className="flex-1 overflow-auto bg-zinc-900 p-8">
+          <EditorContent
+            editor={editor}
+            className="prose prose-invert max-w-none focus:outline-none min-h-[500px] text-white"
+          />
+        </div>
       </div>
     </div>
   );
 }
 
-// Toolbar Button Component
-function ToolbarButton({ icon, onClick, title = "" }) {
+function ToolbarButton({ icon, onClick, active = false }) {
   return (
     <button
       onClick={onClick}
-      className="p-2 hover:bg-zinc-800 rounded-lg text-zinc-300 hover:text-white transition-all active:scale-95"
-      title={title}
+      className={`p-2.5 rounded-xl transition-all ${
+        active
+          ? "bg-zinc-700 text-white"
+          : "hover:bg-zinc-800 text-zinc-300 hover:text-white"
+      }`}
     >
       {icon}
     </button>
