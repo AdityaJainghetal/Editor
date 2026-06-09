@@ -1,4 +1,4 @@
-import RichTextEditor from './RichTextEditor';
+import RichTextEditor from './DescriptionEditor';
 
 function App() {
   return (
